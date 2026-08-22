@@ -65,17 +65,38 @@ public class GameService {
             throw new CellAlreadyOccupiedException("Cell is already occupied");
         }
 
-        char symbol;
+        cells[position] = getCurrentPlayerSymbol(game);
 
-        if (game.getCurrentPlayer().equals(game.getPlayer1())) {
-            symbol = game.getPlayer1Symbol();
-        } else {
-            symbol = game.getPlayer2Symbol();
+        if (hasWinner(cells)) {
+            game.setWinner(game.getCurrentPlayer());
+            game.setStatus(Status.FINISHED);
+
+            return gameRepository.save(game);
         }
 
-        cells[position] = symbol;
+        if (isBoardFull(cells)) {
+            game.setStatus(Status.DRAW);
+            return gameRepository.save(game);
+        }
 
+        if (game.getCurrentPlayer().equals(game.getPlayer1())) {
+            game.setCurrentPlayer(game.getPlayer2());
+        } else {
+            game.setCurrentPlayer(game.getPlayer1());
+        }
 
+        return gameRepository.save(game);
+    }
+
+    private char getCurrentPlayerSymbol(Game game) {
+        if (game.getCurrentPlayer().equals(game.getPlayer1())) {
+            return game.getPlayer1Symbol();
+        } else {
+            return game.getPlayer2Symbol();
+        }
+    }
+
+    private boolean hasWinner(Character[] cells) {
         int[][] winningCombinations = {
                 {0, 1, 2},
                 {3, 4, 5},
@@ -92,34 +113,18 @@ public class GameService {
             if (cells[combination[0]] != null
                     && cells[combination[0]] == cells[combination[1]]
                     && cells[combination[1]] == cells[combination[2]]) {
-
-                game.setWinner(game.getCurrentPlayer());
-                game.setStatus(Status.FINISHED);
-
-                return gameRepository.save(game);
+                return true;
             }
         }
+        return false;
+    }
 
-        boolean boardFull = true;
-
+    private boolean isBoardFull(Character[] cells) {
         for (Character cell : cells) {
             if (cell == null) {
-                boardFull = false;
-                break;
+                return false;
             }
         }
-
-        if (boardFull) {
-            game.setStatus(Status.DRAW);
-            return gameRepository.save(game);
-        }
-
-        if (game.getCurrentPlayer().equals(game.getPlayer1())) {
-            game.setCurrentPlayer(game.getPlayer2());
-        } else {
-            game.setCurrentPlayer(game.getPlayer1());
-        }
-
-        return gameRepository.save(game);
+        return true;
     }
 }
