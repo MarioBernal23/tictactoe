@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 class GameServiceTest {
@@ -83,5 +84,36 @@ class GameServiceTest {
                 GameNotFoundException.class,
                 () -> gameService.getGameById(1L)
         );
+    }
+
+    @Test
+    void shouldMakeMove() {
+        Player player1 = new Player();
+        Player player2 = new Player();
+
+        when(gameRepository.save(any(Game.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        Game game = gameService.createGame(player1, player2);
+        assertNotNull(game);
+
+        game.setId(1L);
+
+        when(gameRepository.findById(game.getId()))
+                .thenReturn(Optional.of(game));
+
+        Player startingPlayer = game.getCurrentPlayer();
+
+        gameService.makeMove(game.getId(), 0);
+
+        if(startingPlayer.equals(player1)) {
+            assertEquals(game.getPlayer1Symbol(),game.getBoard().getCells()[0]);
+        } else {
+            assertEquals(game.getPlayer2Symbol(),game.getBoard().getCells()[0]);
+        }
+
+        assertNotEquals(startingPlayer,game.getCurrentPlayer());
+        assertEquals(Status.IN_PROGRESS, game.getStatus());
+        verify(gameRepository, times(2)).save(any(Game.class));
     }
 }
