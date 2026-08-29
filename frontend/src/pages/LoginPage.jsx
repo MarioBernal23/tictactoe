@@ -1,11 +1,25 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { login } from "../services/playerService";
 
 function LoginPage() {
 
-    const handleLogin = (event) => {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+
+    const navigate = useNavigate();
+
+    const handleLogin = async (event) => {
         event.preventDefault();
 
-        // Más adelante conectaremos con el backend
+        try {
+            const player = await login(username, password);
+
+            localStorage.setItem("player", JSON.stringify(player));
+            navigate("/game");
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     const handleGuest = () => {
@@ -25,8 +39,8 @@ function LoginPage() {
 
                     <input
                         type="text"
-                        id="username"
-                        name="username"
+                        value={username}
+                        onChange={(event) => setUsername(event.target.value)}
                         required
                     />
                 </div>
@@ -38,8 +52,8 @@ function LoginPage() {
 
                     <input
                         type="password"
-                        id="password"
-                        name="password"
+                        value={password}
+                        onChange={(event) => setPassword(event.target.value)}
                         required
                     />
                 </div>

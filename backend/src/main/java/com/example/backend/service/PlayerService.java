@@ -21,4 +21,15 @@ public class PlayerService {
         return playerRepository.findById(id)
                 .orElseThrow( () -> new PlayerNotFoundException("Player not found"));
     }
+
+    public Player login(String username, String password) {
+        Player player = playerRepository.findByUsername(username)
+                .orElseThrow(() -> new PlayerNotFoundException("Invalid username or password"));
+
+        if (!player.getPassword().equals(password)) {
+            throw new PlayerNotFoundException("Invalid username or password");
+        }
+
+        return player;
+    }
 }
