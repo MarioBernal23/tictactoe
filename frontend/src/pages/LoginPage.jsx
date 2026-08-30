@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "../services/playerService";
+import { login, createPlayer } from "../services/playerService";
 
 function LoginPage() {
 
@@ -22,8 +22,19 @@ function LoginPage() {
         }
     };
 
-    const handleGuest = () => {
-        // Más adelante crearemos/obtenemos el usuario invitado
+    const handleGuest = async () => {
+        const username = `guest${Date.now()}`;
+        const password = "guestpassword";
+
+        try {
+            const player = await createPlayer(username, password);
+
+            localStorage.setItem("player", JSON.stringify(player));
+
+            navigate("/game");
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
