@@ -14,6 +14,11 @@ function GamePage() {
         const loadGame = async () => {
             const savedPlayer = JSON.parse(localStorage.getItem("player"));
 
+            if (!savedPlayer) {
+                navigate("/");
+                return;
+            }
+
             setPlayer(savedPlayer);
 
             const game = await createGame(savedPlayer.id, 2);
