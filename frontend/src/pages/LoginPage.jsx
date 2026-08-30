@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { login, createPlayer } from "../services/playerService";
-
+import "../styles/LoginPage.css"
 function LoginPage() {
 
     const [username, setUsername] = useState("");
@@ -38,17 +38,21 @@ function LoginPage() {
     };
 
     return (
-        <div>
-            <h1>Tic Tac Toe</h1>
+        <div className="login-card">
 
-            <form onSubmit={handleLogin}>
+            <h1 className="login-title">
+                Tic Tac Toe
+            </h1>
 
-                <div>
+            <form className="login-form" onSubmit={handleLogin}>
+
+                <div className="form-group">
                     <label htmlFor="username">
                         Username
                     </label>
 
                     <input
+                        className="form-input"
                         type="text"
                         value={username}
                         onChange={(event) => setUsername(event.target.value)}
@@ -56,12 +60,13 @@ function LoginPage() {
                     />
                 </div>
 
-                <div>
+                <div className="form-group">
                     <label htmlFor="password">
                         Password
                     </label>
 
                     <input
+                        className="form-input"
                         type="password"
                         value={password}
                         onChange={(event) => setPassword(event.target.value)}
@@ -69,19 +74,27 @@ function LoginPage() {
                     />
                 </div>
 
-                <button type="submit">
+                <button className="primary-button" type="submit">
                     Login
                 </button>
 
             </form>
 
-            <Link to="/register">
-                Create account
-            </Link>
+            <div className="login-actions">
+                <button
+                    className="guest-button"
+                    type="button"
+                    onClick={handleGuest}
+                >
+                    Play as guest
+                </button>
+                
+                <Link className="register-link" to="/register">
+                    Create account
+                </Link>
 
-            <button type="button" onClick={handleGuest}>
-                Play as guest
-            </button>
+            </div>
+
         </div>
     );
 }
