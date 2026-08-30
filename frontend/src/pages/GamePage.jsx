@@ -51,11 +51,17 @@ function GamePage() {
 
     const handleNewGame = async () => {
         try {
+            setError("");
+
             const newGame = await createGame(player.id, 2);
 
             setGame(newGame);
         } catch (error) {
-            console.error(error);
+            setError(
+                error.response?.data?.message ||
+                JSON.stringify(error.response?.data) ||
+                "Something went wrong"
+            );
         }
     };
     
