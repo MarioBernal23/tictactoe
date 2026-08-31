@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { createPlayer } from "../services/playerService";
+import "../styles/RegisterPage.css"
 
 function RegisterPage() {
 
@@ -23,17 +24,20 @@ function RegisterPage() {
     };
 
     return (
-        <div>
-            <h1>Tic Tac Toe</h1>
+        <div className="register-card">
+            <h1 className="register-title">
+                Tic Tac Toe
+            </h1>
 
-            <form onSubmit={handleRegister}>
+            <form className="register-form" onSubmit={handleRegister}>
 
-                <div>
+                <div className="form-group">
                     <label htmlFor="username">
                         Username
                     </label>
 
                     <input
+                        className="form-input"
                         type="text"
                         id="username"
                         name="username"
@@ -43,12 +47,13 @@ function RegisterPage() {
                     />
                 </div>
 
-                <div>
+                <div className="form-group">
                     <label htmlFor="password">
                         Password
                     </label>
 
                     <input
+                        className="form-input"
                         type="password"
                         id="password"
                         name="password"
@@ -58,12 +63,13 @@ function RegisterPage() {
                     />
                 </div>
 
-                <div>
+                <div className="form-group">
                     <label htmlFor="confirmPassword">
                         Confirm Password
                     </label>
 
                     <input
+                        className="form-input"
                         type="password"
                         id="confirmPassword"
                         name="confirmPassword"
@@ -73,15 +79,17 @@ function RegisterPage() {
                     />
                 </div>
 
-                <button type="submit">
+                <button className="primary-button" type="submit">
                     Register
                 </button>
 
             </form>
 
-            <Link to="/">
-                Login
-            </Link>
+            <div className="register-actions">
+                <Link className="login-link" to="/">
+                    Login
+                </Link>
+            </div>
 
         </div>
     );
