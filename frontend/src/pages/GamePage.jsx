@@ -73,7 +73,7 @@ function GamePage() {
     return (
         <div className="game-page">
 
-            <h1>Tic Tac Toe</h1>
+            <h1 className="game-title">Tic Tac Toe</h1>
 
             <div className="game-header">
                 <h2>
@@ -102,7 +102,7 @@ function GamePage() {
             <div className="board">
                 {game.board.cells.map((cell, index) => (
                     <button
-                        className="cell"
+                        className={`cell ${cell === "X" ? "cell-x" : ""} ${cell === "O" ? "cell-o" : ""}`}
                         key={index}
                         onClick={() => handleMove(index)}
                     >
@@ -113,24 +113,29 @@ function GamePage() {
 
 
 
-            <div className="game-status">
-                <p>
+           <div className="game-status">
+
+                <p className="status">
                     Status: {game.status}
                 </p>
 
-                    {game.status === "FINISHED" && game.winner && (
-                        <p>Winner: {game.winner.username}</p>
-                    )}
+                {game.status === "FINISHED" && game.winner && (
+                    <p className="winner">
+                        Winner: {game.winner.username}
+                    </p>
+                )}
 
-                    {game.status === "FINISHED" && !game.winner && (
-                        <p>Draw!</p>
-                    )}
+                {game.status === "FINISHED" && !game.winner && (
+                    <p className="draw">
+                        Draw!
+                    </p>
+                )}
 
-                <button onClick={handleNewGame}>
+                <button className="new-game-button" onClick={handleNewGame}>
                     New Game
                 </button>
 
-                <button onClick={handleLogout}>
+                <button className="logout-button" onClick={handleLogout}>
                     Logout
                 </button>
 
